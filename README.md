@@ -8,6 +8,11 @@ This repository contains the code used to perform the analyses for both main tex
 All the code was made on R (*v4.4.1*).
 All packages needed are available in *Packages.R*. If you don't have all packages installed, please uncomment L5 of the *Packages.R* script to install them.
 
+
+<p align="center">
+    <img src="https://github.com/bpichon0/Risk_resilience_desertification/blob/master/Figures/Cocit_img.jpg" width="800">
+</p>
+
 # Data
 
 ## NDVI timeseries
@@ -21,9 +26,6 @@ From these timeseries of NDVI between 2000 and 2023, we computed the mean autoco
 Three images were collected using Google Earth or Virtual Earth at each of those sites. The spatial Moran I autocorrelation was computed on each binary image and incorporated to the *./data/Empirical_data.csv* dataframe.
 Spatial patterns were also used to compute the distance to the desertification point following a method proposed in [this article](https://www.biorxiv.org/content/10.1101/2024.02.20.581244v2).
 
-## Simulations
-
-Simulations were done with the [Kéfi et al model](https://www.sciencedirect.com/science/article/pii/S0040580906001250) and are available in *./data/All_simulations.csv*.
 
 ## Simulations
 
@@ -32,7 +34,7 @@ The dataset contains the different parameter used to generate the simulations (c
 
 ## Climate
 
-Climate data have been downloaded from [WorldClim](https://worldclim.org/data/cmip6/cmip6_clim30s.html) and are not available in *./data/Climate* folder because of the size of the data. The needed to extract the data is nevertheless available in the *Analyses_indicators.R* file.
+Climate data have been downloaded from [WorldClim](https://worldclim.org/data/cmip6/cmip6_clim30s.html) and are not available in *./data/Climate* folder because of the size of the data. The code needed to extract the data on the locations of the different dryland sites is nevertheless available in the *Analyses_indicators.R* file.
 
 ## Bibliography analysis
 
