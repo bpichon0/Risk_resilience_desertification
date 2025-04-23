@@ -6,7 +6,7 @@
 
 This repository contains the code used to perform the analyses for both main text and supplementary information.
 All the code was made on R (*v4.4.1*).
-All packages needed are available in *Packages.R*. If you don't have all packages installed, please uncomment L5 of the *Packages.R* script to install them.
+All packages needed are available in *Functions.R*. If you don't have all packages installed, please uncomment line 7 of the *Functions.R* script to install them.
 
 
 <p align="center">

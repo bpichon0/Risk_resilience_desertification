@@ -1,14 +1,17 @@
 rm(list=ls())
-source("./Risk_dryland_function.R")
+source("./Functions.R")
 
 dir.create("./Figures",showWarnings = F)
-# With simulations ----
+
+# Comparing resilience indicators in simulations and in the data ----
+
+
 
 d_obs=read.table("./data/Empirical_data.csv",sep=";")
 d_sim=read.table("./data/All_simulations.csv",sep=";")
 
 p01=ggplot(d_sim)+
-  geom_point(aes(x=AC_ini_space,y=AC_ini_time),fill="lightblue",color="grey30",size=1,shape=21,width=.1)+
+  geom_point(aes(x=AC_ini_space,y=AC_ini_time),fill="lightblue",color="grey30",size=1,shape=21)+
   the_theme2+
   labs(x="Temporal autocorrelation (space)",y="Temporal autocorrelation (time)")
   
