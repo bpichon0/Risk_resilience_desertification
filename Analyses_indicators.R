@@ -5,8 +5,6 @@ dir.create("./Figures",showWarnings = F)
 
 # Comparing resilience indicators in simulations and in the data ----
 
-
-
 d_obs=read.table("./data/Empirical_data.csv",sep=";")
 d_sim=read.table("./data/All_simulations.csv",sep=";")
 
@@ -14,7 +12,7 @@ p01=ggplot(d_sim)+
   geom_point(aes(x=AC_ini_space,y=AC_ini_time),fill="lightblue",color="grey30",size=1,shape=21)+
   the_theme2+
   labs(x="Temporal autocorrelation (space)",y="Temporal autocorrelation (time)")
-  
+
 p02=ggplot(d_sim%>%mutate(., Dist_desert=as.numeric(cut(.$Dist_desert,breaks=7)))%>%
          dplyr::group_by(., Dist_desert)%>%
          dplyr::summarise(., .groups = "keep",mean_AC=mean(AC_ini_time),sd_AC=sd(AC_ini_time),AC_space_mean=mean(AC_ini_space),AC_space_sd=sd(AC_ini_space)))+
@@ -59,8 +57,7 @@ p4=ggplot(d_obs)+
   labs(x="Distance to a desertification point \n (estimated in the data)",y="Average SD")+
   scale_x_continuous(breaks=c(-5,-2),labels=c("Close","Far"))
 
-p02_title=
-p02+ggtitle("Model")+
+p02_title=p02+ggtitle("Model")+
   theme(panel.grid = element_blank(),
         panel.border = element_blank(),
         axis.line.x = element_line(color = "black"),
@@ -68,8 +65,7 @@ p02+ggtitle("Model")+
         plot.title = element_text(size = 12, margin = margin(b = -25,l = 150),color = "white"))+
   annotate("rect",xmin=.17,xmax=.25,ymin=.96,ymax=.98,alpha=1,color="black",fill = "black")
 
-p03_title=
-  p03+ggtitle("Data")+
+p03_title=p03+ggtitle("Data")+
   theme(panel.grid = element_blank(),
         panel.border = element_blank(),
         axis.line.x = element_line(color = "black"),
@@ -77,9 +73,36 @@ p03_title=
         plot.title = element_text(size = 12, margin = margin(b = -25,l = 195),color = "white"))+
   annotate("rect",xmin=.4,xmax=.55,ymin=.82,ymax=.9,alpha=1,color="black",fill = "black")
 
-p_tot=ggarrange(ggarrange(p02,p03,ncol=2),
-  ggarrange(p1,p2,ncol=2),
-  nrow=2,labels = c("a","b"),heights = c(1,1))
+p_label1=ggplot(NULL)+geom_node_label(
+  data = NULL,
+  aes(x = .2, y = 1.2, label = "Empirical data"),
+  color = "white",
+  fill="black",
+  label.size = 1,   
+  family = "NewCenturySchoolbook",
+  label.padding = unit(.5, "lines"),
+  label.r = unit(0.5, "lines"),  
+  size = 5             
+)+theme_void()
+
+p_label2=ggplot(NULL)+geom_node_label(
+  data = NULL,
+  aes(x = .2, y = 1.2, label = "Theoretical model"),
+  color = "white",
+  fill="black",
+  label.size = 1,   
+  family = "NewCenturySchoolbook",
+  label.padding = unit(.5, "lines"),
+  label.r = unit(0.5, "lines"),  
+  size = 5             
+)+theme_void()
+
+
+p_tot=ggarrange(
+  ggarrange(p_label2,p_label1,ncol=2),
+  ggarrange(p02,p03,ncol=2,labels = letters[1:2]),
+  ggarrange(p1,p2,ncol=2,labels = letters[3:4]),
+  nrow=3,heights = c(.15,1,1))
 
 ggsave("./Figures/Model_data_temporal_spatial.pdf",p_tot,width = 7,height = 7)
 
@@ -175,3 +198,99 @@ ggsave("./Figures/Risk_future_clim.pdf",
                                     axis.title = element_text(size=13),axis.title.y = element_blank())+
                              labs(fill="Change in temperature \n (Future - Current)"),ncol=2,common.legend = T,legend = "bottom",align = "hv"),nrow=2),
        width = 7,height = 8)
+
+
+
+
+
+
+
+
+
+
+
+set.seed(417)
+library(plotly)
+
+p1=plot_ly(data=d_obs,x=~log(Mean_Dist), y=~Resistance_month_drought, 
+           z=~MAP_current-MAP_future, type="scatter3d", mode="markers", 
+           color=~(MAP_future-MAP_current),colors = "RdGy")%>%
+  layout(yaxis = list(title = 'Temporal indicator of resilience (autocorrelation)'),
+         xaxis = list(title = 'Spatial indicator of resilience (autocorrelation)'),
+         legend = list(title=list(text='<b> Future change in temperature </b>')))
+
+p1=plot_ly(data=d_obs,x=~log(Mean_Dist), y=~Resistance_month_drought, 
+           z=~MAP_current-MAP_future, type="scatter3d", mode="markers", 
+           color=~(MAP_future-MAP_current),colors = "RdGy")%>%
+  layout(yaxis = list(title = 'Temporal indicator of resilience (autocorrelation)',showline= T, linewidth=2, linecolor='black', mirror = T, showticklabels = F),
+         xaxis = list(title = 'Spatial indicator of resilience (autocorrelation)',showline= T, linewidth=2, linecolor='black', mirror = T, showticklabels = F),
+         legend = list(title=list(text='<b> Future change in temperature </b>')))
+
+
+
+fig2 <-  plot_ly(data = iris ,x =  ~Sepal.Length, y = ~Sepal.Width, color = ~Species, type = 'scatter', mode = 'markers')%>%
+  layout(title = 'Manually Specified Labels', plot_bgcolor = "#e5ecf6", xaxis = list(title = 'Sepal Length (cm)'), 
+         yaxis = list(title = 'Sepal Width (cm)'), legend = list(title=list(text='<b> Species of Iris </b>')))
+fig2
+
+library("gg3D")
+
+
+ggplot(d_obs, aes(x=moran_I, y=AC_mean, z=MAP_future, color=log(MAP_future))) + 
+  theme_void() +
+  axes_3D() +
+  stat_3D()
+
+
+library("plot3D")
+
+pdf("./Risk_3D_1.pdf",width = 7,height = 7)
+par(mfrow=c(1,1))
+scatter3D(d_obs$AC_mean,d_obs$moran_I,d_obs$MAP_current-d_obs$MAP_future,cex=2,
+          pch = 16,theta = 45, phi =30,col=brewer.pal(n = 8, name = "BrBG"),
+          grid=TRUE, box=T, clab = c("Current-Future", "precipitations"),
+          xlab = c("\n Temporal indicator resilience \n High resilience            Low resilience" ),
+          ylab ="\n Spatial indicator resilience \n High resilience            Low resilience", zlab = "Current-Future precipitations")
+
+dev.off()
+pdf("./Risk_3D_2.pdf",width = 7,height = 14)
+par(mfrow=c(2,1))
+
+scatter3D(d_obs$Resistance_month_drought,
+          log(d_obs$Mean_Dist),d_obs$MAT_current-d_obs$MAT_future,cex=2,
+          labels = rownames(d_obs),
+          pch = 16,theta = 45, phi =30,col=brewer.pal(n = 8, name = "RdGy"),
+          grid=TRUE, box=T, clab = c("Current-Future", "temperature"),
+          xlab = c("\n Drought resistance \n Low resistance            High resistance" ),
+          ylab ="\n Distance to desertification point \n Close                             Far", zlab = "Current-Future temperature")
+scatter3D(d_obs$Recovery_drought,
+          log(d_obs$Mean_Dist),d_obs$MAT_current-d_obs$MAT_future,cex=2,
+          labels = rownames(d_obs),
+          pch = 16,theta = 45, phi =30,col=brewer.pal(n = 8, name = "RdGy"),
+          grid=TRUE, box=T, clab = c("Current-Future", "temperature"),
+          xlab = c("\n Drought recovery time \n Slow recovery            Fast recovery" ),
+          ylab ="\n Distance to desertification point \n Close                             Far", zlab = "Current-Future temperature")
+dev.off()
+
+
+d_obs$AC_mean
+
+
+d_pair1=d_obs[,c("Mean_Dist","Resistance_month_drought","Recovery_drought","AC_mean","moran_I")]%>%
+  mutate(.,Mean_Dist=log(Mean_Dist))
+
+colnames(d_pair1)=c("Dist. to \n desertif. point","Drought resistance","Drought \n recovery time","Temporal autocorr.","Spatial autocorr.")
+p_pairs1=ggpairs(
+  d_pair1
+)+the_theme2
+
+ggsave("./Pairs_resilience.pdf",p_pairs1,width = 7,height = 7)
+
+d_pair1=d_obs[,c("Mean_Dist","Resistance_month_drought","Recovery_drought","AC_mean","moran_I")]%>%
+  mutate(.,Mean_Dist=log(Mean_Dist))
+
+colnames(d_pair1)=c("Dist. to \n desertif. point","Drought resistance","Drought \n recovery time","Temporal autocorr.","Spatial autocorr.")
+p_pairs1=ggpairs(
+  d_pair1
+)+the_theme2
+p_(pm)

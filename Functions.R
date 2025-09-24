@@ -5,6 +5,9 @@ x = c("tidyverse", "ggpubr", "sf", "simecol","reshape2",
       "ggraph","tidygraph")
 
 # to install the packages: lapply(x, install.packages, character.only = TRUE)
+# to install ggwordcloud:  devtools::install_github("lepennec/ggwordcloud")
+
+
 lapply(x, require, character.only = TRUE)
 the_theme2 = theme_classic() + theme(
   legend.position = "bottom",
@@ -19,8 +22,14 @@ the_theme2 = theme_classic() + theme(
 )
 `%!in%` = Negate(`%in%`)
 
+
+firstup = function(x) {
+  substr(x, 1, 1) = toupper(substr(x, 1, 1))
+  x
+}
+
 Layout_communities=function(net,switch=F,communities=NULL,seed_=123,
-                            community_colors = NULL){
+                            community_colors = NULL,max_radius=5){
   
   if (is.null(community_colors)){
     community_colors=c("#7FB5BD","#E2A192","#D27191", "#C4EF8D" , "#FDB462")
@@ -61,7 +70,7 @@ Layout_communities=function(net,switch=F,communities=NULL,seed_=123,
     name_nodes_in_comm=which(rownames(as_adjacency_matrix(net$graph)) %in% name_nodes_in_comm)
     subgraph = induced_subgraph(graph_net, vids = name_nodes_in_comm)
     
-    degrees = degree(subgraph)
+    degrees = igraph::degree(subgraph)
     center_idx = which.max(degrees)
     center_node = name_nodes_in_comm[center_idx]
     
@@ -69,7 +78,7 @@ Layout_communities=function(net,switch=F,communities=NULL,seed_=123,
     
     others = setdiff(name_nodes_in_comm, center_node)
     n_others = length(others)
-    radius_max = 5  
+    radius_max = max_radius  
     if (n_others > 0) {
       angles = seq(0, 2 * pi, length.out = n_others + 1)[-1]
       radius = seq(1, radius_max , length.out = n_others + 1)[-1]
@@ -106,12 +115,12 @@ Layout_communities=function(net,switch=F,communities=NULL,seed_=123,
   V(graph_net)$label=names(V(net$graph))
   V(graph_net)$size=V(net$graph)$size
   
-  plot(graph_net,
-       layout = layout_matrix,
-       vertex.color = node_colors,
-       edge.color = edge_colors,
-       edge.curved = 0,
-       edge.lty = 1)
+  # plot(graph_net,
+  #      layout = layout_matrix,
+  #      vertex.color = node_colors,
+  #      edge.color = edge_colors,
+  #      edge.curved = 0,
+  #      edge.lty = 1)
   
   return(list(graph_net=graph_net,
               community_membership=list_member,
