@@ -10,7 +10,7 @@ All packages needed are available in *Functions.R*. If you don't have all packag
 
 
 <p align="center">
-    <img src="https://github.com/bpichon0/Risk_resilience_desertification/blob/master/Figures/Cocit_img.jpg" width="800">
+    <img src="https://github.com/bpichon0/Risk_resilience_desertification/blob/master/Figures/risk.jpg" width="800">
 </p>
 
 # Data
@@ -25,12 +25,6 @@ From these timeseries of NDVI between 2000 and 2023, we computed the mean autoco
 
 Three images were collected using Google Earth or Virtual Earth at each of those sites. The spatial Moran I autocorrelation was computed on each binary image and incorporated to the *./data/Empirical_data.csv* dataframe.
 Spatial patterns were also used to compute the distance to the desertification point following a method proposed in [this article](https://www.biorxiv.org/content/10.1101/2024.02.20.581244v2).
-
-
-## Simulations
-
-Simulations were done with the [Kéfi et al model](https://www.sciencedirect.com/science/article/pii/S0040580906001250) and are available in *./data/All_simulations.csv*.
-The dataset contains the different parameter used to generate the simulations (c, d, b_ini; 900 parameter sets), the temporal and spatial indicators of resilience.
 
 ## Climate
 

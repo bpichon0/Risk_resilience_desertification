@@ -242,7 +242,7 @@ for (cluster_ID in 1:4){
                        mutate(Name_cluster=cluster_ID))
 }
 
-
+all_keywords$Keyword[100]="CO2 fertilization"
 communities%>%sample_n(20)
 
 blue_clust=all_keywords%>%
